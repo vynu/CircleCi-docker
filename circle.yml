@@ -1,0 +1,11 @@
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker build -t vynu/sample-node-ci-test .
+
+test:
+  override:
+    - docker run vynu/sample-node-ci-test npm test
