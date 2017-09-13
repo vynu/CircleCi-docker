@@ -1,6 +1,5 @@
 #!/bin/bash
-docker build -t vynu/sample-node-ci-test .
-docker push willrstern/sample-node-ci-test
+docker push vynu/sample-node-ci-test
 
 ssh vynu@aws.fedora << EOF
 docker pull vynu/sample-node-ci-test:latest
