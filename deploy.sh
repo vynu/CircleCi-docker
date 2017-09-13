@@ -1,7 +1,7 @@
 #!/bin/bash
 docker push vynu/sample-node-ci-test
 
-ssh vynu@aws.fedora << EOF
+ssh vynu@54.218.83.137 << EOF
 docker pull vynu/sample-node-ci-test:latest
 docker stop web || true
 docker rm web || true
