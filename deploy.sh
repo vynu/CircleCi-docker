@@ -1,7 +1,7 @@
 #!/bin/bash
 docker push vynu/sample-node-ci-test
 
-ssh vynu@54.218.83.137 << EOF
+ssh vynu@54.186.127.230 << EOF
 docker pull vynu/sample-node-ci-test:latest
 docker stop web || true
 docker rm web || true
