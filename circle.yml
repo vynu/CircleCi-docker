@@ -4,11 +4,14 @@ machine:
 
 dependencies:
   override:
-    - docker build -t vynu/sample-node-ci-test .
+    - if [[ "$CIRCLE_BRANCH" == staging ]]; then docker build -f Dockerfile.staging -t vynu/sample-node-ci-multi-env .; fi;
+    - if [[ "$CIRCLE_BRANCH" == qa ]]; then docker build -f Dockerfile.qa -t vynu/sample-node-ci-multi-env .; fi;
+    - if [[ "$CIRCLE_BRANCH" != qa ]] && [[ "$CIRCLE_BRANCH" != staging ]]; then docker build -t vynu/sample-node-ci-multi-env .; fi;
+
 
 test:
   override:
-    - docker run vynu/sample-node-ci-test npm test
+    - docker run vynu/sample-node-ci-multi-env npm test
 
 deployment:
   production:
@@ -16,3 +19,15 @@ deployment:
     commands:
       - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
       - ./deploy.sh
+  staging:
+    branch: staging
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag vynu/sample-node-ci-multi-env:latest vynu/sample-node-ci-multi-env:staging
+      - ./deploy.staging.sh
+  qa:
+    branch: qa
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag vynu/sample-node-ci-multi-env:latest vynu/sample-node-ci-multi-env:qa
+      - ./deploy.qa.sh
